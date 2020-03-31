@@ -8,6 +8,7 @@ package cmd
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"os"
 
@@ -36,7 +37,12 @@ credentials to match a user identity defined in the $HOME/.aws/crdentials file.`
 	// cariation of Run is chosen to facilitiate unit testing.
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		fmt.Println("Root command was executed")
+		// There must be an MFA code
+		if len(args) != 1 {
+			return errors.New("An MFA token must be provided")
+		}
+
+		fmt.Printf("Root command was executed with MFA token: %s\n", args[0])
 		return nil
 	},
 }
