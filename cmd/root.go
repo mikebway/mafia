@@ -13,6 +13,7 @@ import (
 	"os"
 
 	"github.com/mikebway/mafia/creds"
+	"github.com/mikebway/mafia/file"
 	"github.com/spf13/cobra"
 )
 
@@ -134,8 +135,14 @@ func resetCommand() {
 // potentially saving AWS session credentials to the  ~/.aws/credentials file.
 func fetchSessionCredentials(mfaToken string) error {
 
+	// Obtain the MFA device ID / serial number as defined by AWS
+	mfaDeviceID, err := file.GetMFADeviceID()
+	if err != nil {
+		return err
+	}
+
 	// Ask AWS for the credentials
-	credentials, err := creds.GetSessionCredentials("arn:aws:iam::1111111:mfa/nobody", mfaToken, 3600)
+	credentials, err := creds.GetSessionCredentials(mfaDeviceID, mfaToken, 3600)
 	if err != nil {
 		return err
 	}
