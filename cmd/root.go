@@ -13,7 +13,7 @@ import (
 	"os"
 
 	"github.com/mikebway/mafia/creds"
-	"github.com/mikebway/mafia/file"
+	"github.com/mikebway/mafia/mfile"
 	"github.com/spf13/cobra"
 )
 
@@ -31,7 +31,7 @@ var rootCmd = &cobra.Command{
 	Long: `Given an token-code obtained from an MFA device, establishes temporary AWS 
 credentials to match a user identity defined in the $HOME/.aws/crdentials file.`,
 
-	// SilenceUsage:  true, // Only display help when explicitly requested, not on error
+	SilenceUsage:  true, // Only display help when explicitly requested, not on error
 	SilenceErrors: true, // Only display errors once (helpful when using RunE rathr than Run)
 
 	// RunE is called after the command line has been successfully parsed if no sub-command
@@ -136,7 +136,7 @@ func resetCommand() {
 func fetchSessionCredentials(mfaToken string) error {
 
 	// Obtain the MFA device ID / serial number as defined by AWS
-	mfaDeviceID, err := file.GetMFADeviceID()
+	mfaDeviceID, err := mfile.GetMFADeviceID()
 	if err != nil {
 		return err
 	}
