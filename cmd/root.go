@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/mikebway/mafia/creds"
 	"github.com/spf13/cobra"
 )
 
@@ -42,8 +43,8 @@ credentials to match a user identity defined in the $HOME/.aws/crdentials file.`
 			return errors.New("An MFA token must be provided")
 		}
 
-		fmt.Printf("Root command was executed with MFA token: %s\n", args[0])
-		return nil
+		// Do the work!
+		return fetchSessionCredentials(args[0])
 	},
 }
 
@@ -127,4 +128,34 @@ func resetCommand() {
 	// Clear and then re-initialize all the flags definitions
 	rootCmd.ResetFlags()
 	initRootFlags()
+}
+
+// fetchSessionCredentials orchestrates the work of obtaining, displaying, and
+// potentially saving AWS session credentials to the  ~/.aws/credentials file.
+func fetchSessionCredentials(mfaToken string) error {
+
+	// Ask AWS for the credentials
+	credentials, err := creds.GetSessionCredentials("arn:aws:iam::1111111:mfa/nobody", mfaToken, 3600)
+	if err != nil {
+		return err
+	}
+
+	// Joy - it worked!
+
+	// Display the results in a form that can be copy-and-pasted to set as environment variables
+	fmt.Printf("\nEnvironment Variables\n\n")
+	fmt.Printf("export AWS_ACCESS_KEY_ID=%s\n", *credentials.AccessKeyID)
+	fmt.Printf("export AWS_SECRET_ACCESS_KEY=%s\n", *credentials.SecretAccessKey)
+	fmt.Printf("export AWS_SESSION_TOKEN=%s\n", *credentials.SessionToken)
+
+	// Display the results in a form that can be copy-and-pasted to set as environment variables
+	fmt.Printf("\nTo paste into ~/.aws/credentials\n\n")
+	fmt.Println("[default-session]")
+	fmt.Printf("aws_access_key_id = %s\n", *credentials.AccessKeyID)
+	fmt.Printf("aws_secret_access_key = %s\n", *credentials.SecretAccessKey)
+	fmt.Printf("aws_session_token = %s\n", *credentials.SessionToken)
+	fmt.Println()
+
+	// We are done, we are happy
+	return nil
 }

@@ -1,3 +1,8 @@
+// Unit tests for the cmd package - the Mafia command line parser.
+//
+// Copyright © 2020 Michael D Broadway <mikebway@mikebway.com>
+//
+// Licensed under the ISC License (ISC)
 package cmd
 
 // Unit tests for the Cobra command line parsers
