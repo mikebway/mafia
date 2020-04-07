@@ -16,12 +16,20 @@ advantages of
 
 ## Usage
 
-Running the `mafia` utility with either the `--help` or `-h` flags will display the
-following usage information:
+Running the `mafia` utility with any of an argument of `help`, or the `--help` or `-h`
+flags will display the following usage information:
 
 ```text
-Given an token-code obtained from an MFA device, establishes temporary AWS
-credentials to match a user identity defined in the $HOME/.aws/crdentials file.
+Given a token/number obtained from an MFA device, establishes temporary AWS
+credentials to match a user identity defined in the ~/.aws/crdentials file.
+
+Before running, you must add your MFA serial number to the [default] section of
+the ~/.aws/crdentials file, alongside the aws_access_key_id and
+aws_secret_access_key values, as follows:
+
+   mfa_device_id = arn:aws:iam::745000069704:mfa/mike
+
+Replacing 745000069704 with your account number, and mike with your username.
 
 Usage:
   mafia token-code [flags]
@@ -30,6 +38,9 @@ Flags:
   -h, --help   help for mafia
       --save   save the obtained credentials to the .aws/credentials file
 ```
+
+Note especially the need to declare your MFA device ID / serial number in the
+`$HOME/.aws/credentials` file.
 
 ## Unit / Integration Testing
 

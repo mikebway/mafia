@@ -8,7 +8,6 @@ package cmd
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"os"
 
@@ -28,8 +27,18 @@ var (
 var rootCmd = &cobra.Command{
 	Use:   "mafia token-code",
 	Short: "Establishes temporary AWS credentials where MFA authentication codes are required",
-	Long: `Given an token-code obtained from an MFA device, establishes temporary AWS 
-credentials to match a user identity defined in the $HOME/.aws/crdentials file.`,
+	Long: `
+Given a token/number obtained from an MFA device, establishes temporary AWS 
+credentials to match a user identity defined in the ~/.aws/crdentials file.
+
+Before running, you must add your MFA serial number to the [default] section of
+the ~/.aws/crdentials file, alongside the aws_access_key_id and 
+aws_secret_access_key values, as follows:
+
+   mfa_device_id = arn:aws:iam::745000069704:mfa/mike
+
+Replacing 745000069704 with your account number, and mike with your username.
+`,
 
 	SilenceUsage:  true, // Only display help when explicitly requested, not on error
 	SilenceErrors: true, // Only display errors once (helpful when using RunE rathr than Run)
@@ -39,9 +48,9 @@ credentials to match a user identity defined in the $HOME/.aws/crdentials file.`
 	// cariation of Run is chosen to facilitiate unit testing.
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		// There must be an MFA code
-		if len(args) != 1 {
-			return errors.New("An MFA token must be provided")
+		// If no MFA code was provided or help was requested, display the help
+		if len(args) != 1 || args[0] == "help" {
+			return cmd.Help()
 		}
 
 		// Do the work!
