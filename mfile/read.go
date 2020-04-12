@@ -1,9 +1,10 @@
-// Package mfile loads and saves AWS credential information from a property file.
-//
+package mfile
+
 // Copyright © 2020 Michael D Broadway <mikebway@mikebway.com>
 //
 // Licensed under the ISC License (ISC)
-package mfile
+//
+// See doc.go for package documentation
 
 import (
 	"fmt"
@@ -19,6 +20,10 @@ const (
 
 	// The key name of the MFA device ID field within a configuration file section
 	mfaDeviceIDKey = "mfa_device_id"
+
+	// Suffix appended to the non-session section name to name the correseponding
+	// MHF authenticated session credentials section
+	sessionSectionSuffix = "-session"
 )
 
 // getDefaultCredentialsFilepath obtains the home directory of the current

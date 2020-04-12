@@ -27,9 +27,9 @@ Before running, you must add your MFA serial number to the [default] section of
 the ~/.aws/crdentials file, alongside the aws_access_key_id and
 aws_secret_access_key values, as follows:
 
-   mfa_device_id = arn:aws:iam::745000069704:mfa/mike
+   mfa_device_id = arn:aws:iam::999999999999:mfa/jane
 
-Replacing 745000069704 with your account number, and mike with your username.
+Replacing 999999999999 with your account number, and jane with your username.
 
 Usage:
   mafia token-code [flags]
@@ -41,6 +41,23 @@ Flags:
 
 Note especially the need to declare your MFA device ID / serial number in the
 `$HOME/.aws/credentials` file.
+
+## What's Missing
+
+First and foremost - unit testing is woefully incomplete. That is my next task
+and please don't lecture me on test driven development, I know this is bad practice!
+
+After that:
+
+* A flag to specifiy something other than the default credentials in the
+`$HOME/.aws/credentials` file.
+
+* A flag to specify the name and path of the credentials file, other than the
+default `$HOME/.aws/credentials` location.
+
+* Support for Microsoft Windows users, where credential file paths are
+specified differently. The author is unlikely to get to that since they don't 
+have a Windows system to build and test with.
 
 ## Unit / Integration Testing
 

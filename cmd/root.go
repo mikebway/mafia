@@ -35,9 +35,9 @@ Before running, you must add your MFA serial number to the [default] section of
 the ~/.aws/crdentials file, alongside the aws_access_key_id and 
 aws_secret_access_key values, as follows:
 
-   mfa_device_id = arn:aws:iam::745000069704:mfa/mike
+   mfa_device_id = arn:aws:iam::999999999999:mfa/jane
 
-Replacing 745000069704 with your account number, and mike with your username.
+Replacing 999999999999 with your account number, and jane with your username.
 `,
 
 	SilenceUsage:  true, // Only display help when explicitly requested, not on error
@@ -54,7 +54,28 @@ Replacing 745000069704 with your account number, and mike with your username.
 		}
 
 		// Do the work!
-		return fetchSessionCredentials(args[0])
+		credentials, err := fetchSessionCredentials(args[0])
+		if err != nil {
+			return err
+		}
+
+		// If we are to save the credentials ...
+		if saveCredentials {
+
+			// Try to the save the credentials
+			err = saveSessionCredentials(credentials)
+
+			// If that worked, give the user a comfort signal
+			fmt.Println("Session credentials saved to file")
+
+		} else {
+
+			// Not saving the credentials so show them in stdout
+			displaySessionCredentials(credentials)
+		}
+
+		// All done - maybe not successfully; either way return the rror value that we have
+		return err
 	},
 }
 
@@ -142,27 +163,29 @@ func resetCommand() {
 
 // fetchSessionCredentials orchestrates the work of obtaining, displaying, and
 // potentially saving AWS session credentials to the  ~/.aws/credentials file.
-func fetchSessionCredentials(mfaToken string) error {
+func fetchSessionCredentials(mfaToken string) (*creds.SessionCredentials, error) {
 
 	// Obtain the MFA device ID / serial number as defined by AWS
 	mfaDeviceID, err := mfile.GetMFADeviceID()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	// Ask AWS for the credentials
-	credentials, err := creds.GetSessionCredentials(mfaDeviceID, mfaToken, 3600)
-	if err != nil {
-		return err
-	}
+	// Ask AWS for the credentials and return what we get
+	return creds.GetSessionCredentials(mfaDeviceID, mfaToken, 3600)
+}
 
-	// Joy - it worked!
+// displaySessionCredentials shows the, you guessed it, session credentials on stdout.
+// The display is given twice, once formated for use as environment variables and
+// once ready to copy-nd-paste into the  ~/.aws/credentials file.
+func displaySessionCredentials(credentials *creds.SessionCredentials) {
 
 	// Display the results in a form that can be copy-and-pasted to set as environment variables
 	fmt.Printf("\nEnvironment Variables\n\n")
 	fmt.Printf("export AWS_ACCESS_KEY_ID=%s\n", *credentials.AccessKeyID)
 	fmt.Printf("export AWS_SECRET_ACCESS_KEY=%s\n", *credentials.SecretAccessKey)
 	fmt.Printf("export AWS_SESSION_TOKEN=%s\n", *credentials.SessionToken)
+	fmt.Println("history -c # clear shell history immediatly after setting secrets")
 
 	// Display the results in a form that can be copy-and-pasted to set as environment variables
 	fmt.Printf("\nTo paste into ~/.aws/credentials\n\n")
@@ -171,7 +194,11 @@ func fetchSessionCredentials(mfaToken string) error {
 	fmt.Printf("aws_secret_access_key = %s\n", *credentials.SecretAccessKey)
 	fmt.Printf("aws_session_token = %s\n", *credentials.SessionToken)
 	fmt.Println()
+}
 
-	// We are done, we are happy
-	return nil
+// saveSessionCredentials attempts to svae the obtained session credentials to the
+// ~/.aws/credentials file.
+func saveSessionCredentials(credentials *creds.SessionCredentials) error {
+
+	return mfile.SaveSessionCredentials(credentials.AccessKeyID, credentials.SecretAccessKey, credentials.SessionToken)
 }
