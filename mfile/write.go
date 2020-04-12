@@ -10,14 +10,15 @@ import (
 //
 // Licensed under the ISC License (ISC)
 //
-// See doc.go for package documentation
+// See doc.go for other overall package documentation. This file contains
+// package methods related to updating the AWS credentials file.
 
 // SaveSessionCredentials writes the given credentials to a "session" section of the
 // default AWS credentials file, i.e. $HOME/.aws/credentials.
 func SaveSessionCredentials(accessKeyID, secretAccessKey, sessionToken *string) error {
 
 	// Have our siblings do all the work!
-	return SaveSessionCredentialsToFile(getDefaultCredentialsFilepath(),
+	return SaveSessionCredentialsToFile(defaultCredentialsFilePath,
 		accessKeyID, secretAccessKey, sessionToken)
 }
 
@@ -39,9 +40,9 @@ func SaveSessionCredentialsToFile(filepath string, accessKeyID, secretAccessKey,
 	}
 
 	// Set the section key/values
-	sessionSection.NewKey("aws_access_key_id", *accessKeyID)
-	sessionSection.NewKey("aws_secret_access_key", *secretAccessKey)
-	sessionSection.NewKey("aws_session_token", *sessionToken)
+	sessionSection.NewKey(accessKeyIDKey, *accessKeyID)
+	sessionSection.NewKey(secretAccessKeyKey, *secretAccessKey)
+	sessionSection.NewKey(sessionTokenKey, *sessionToken)
 
 	// Save the file and we are done
 	return cfg.SaveTo(filepath)

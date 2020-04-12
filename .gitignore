@@ -9,6 +9,7 @@ slog
 *.dylib
 
 # Test binary, built with `go test -c`
+# Also, test versions of AWS credentials files, created and used by unit tests
 *.test
 
 # Output of the go coverage tool
