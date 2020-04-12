@@ -44,8 +44,7 @@ func TestBareCommand(t *testing.T) {
 	output := executeCommand()
 
 	// We should have a subcommand required command and a complete usage dump
-	require.NotNil(t, executeError, "there should have been an error")
-	require.Equal(t, "An MFA token must be provided", executeError.Error(), "Expected MFA token required error")
+	require.Nil(t, executeError, "there should not have been an error: ", executeError)
 	require.Contains(t, output,
 		"mafia token-code [flags]",
 		"Expected usage display")
@@ -55,11 +54,12 @@ func TestBareCommand(t *testing.T) {
 func TestSimpleOKCommand(t *testing.T) {
 
 	// Run the command with a token value
-	output := executeCommand("123456789")
+	output := executeCommand("123456")
 
 	// We should have a subcommand required command and a complete usage dump
-	require.Nil(t, executeError, "there should have been no error: %v", executeError)
-	require.Contains(t, "Root command was executed with MFA token: 123456789", output, "Output not as expected")
+	require.NotNil(t, executeError, "there should have been an error")
+	require.Contains(t, executeError.Error(), "invalid MFA one time pass code", "Error should have complained about invalid MFA token length")
+	require.Empty(t, output, "Output for an error condition should have been empty")
 }
 
 // TestPrepForExecute bumps code coverage by looking at a test prep function that
@@ -74,13 +74,14 @@ func TestPrepForExecute(t *testing.T) {
 	// Call our target function with some parameters that nothing else uses
 	buf := PrepForExecute("TestPrepForExecute")
 
-	// Execute the command, collecting outout in our buffer
+	// Execute the command, collecting output in our buffer
 	Execute()
 
 	// Convert the buffer to a string
 	output := buf.String()
 
 	// Check everything out
-	require.Nil(t, executeError, "there should have been no error: %v", executeError)
-	require.Contains(t, "Root command was executed with MFA token: TestPrepForExecute", output, "Output not as expected")
+	require.NotNil(t, executeError, "there should have been an error")
+	require.Contains(t, executeError.Error(), "Member must have length less than or equal to 6", "Error should have complained about invalid MFA token length")
+	require.Empty(t, output, "Output for an error condition should have been empty")
 }
