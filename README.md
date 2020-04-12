@@ -5,7 +5,7 @@ advantages of
 
 * Not having to remember and type out your MFA device serial number.
 
-* Displaying the obataind session credentials in copy-and paste ready
+* Displaying the obatained session credentials in copy-and paste ready
   forms for both:
 
   * Setting environment variables
