@@ -35,6 +35,9 @@ const (
 	// Suffix appended to the non-session section name to name the correseponding
 	// MHF authenticated session credentials section
 	sessionSectionSuffix = "-session"
+
+	// The default session section name
+	sessionSectionName = defaultSectionName + sessionSectionSuffix
 )
 
 var (
@@ -68,9 +71,9 @@ func GetMFADeviceIDFromFile(filepath string) (string, error) {
 	}
 
 	// Fetch the default section - if there is one
-	defaultSection := cfg.Section(defaultSectionName)
-	if len(defaultSection.Keys()) == 0 {
-		return "", fmt.Errorf("%s section not found or empty in %s", defaultSectionName, filepath)
+	defaultSection, err := cfg.GetSection(defaultSectionName)
+	if err != nil {
+		return "", fmt.Errorf("%s section not found in %s", defaultSectionName, filepath)
 	}
 
 	// Fetch the MFA device ID entry - if there is one
@@ -107,7 +110,7 @@ func getDefaultCredentialsFilepath() string {
 	// but if it does, barf and kill the program here and now.
 	usr, err := user.Current()
 	if err != nil {
-		fmt.Printf("Failed to obtain credentials information: %v\n", err)
+		fmt.Printf("Aborting all tests. Failed to obtain credentials information: %v\n", err)
 		os.Exit(1)
 	}
 

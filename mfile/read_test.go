@@ -78,7 +78,7 @@ func TestGetMFADeviceIDMissingSection(t *testing.T) {
 	// Asking for the MFA device ID should fail
 	id, err := GetMFADeviceID()
 	require.NotNil(t, err, "there should have been an error")
-	require.Equal(t, "default section not found or empty in ./credentials.test", err.Error(), "not the expected error")
+	require.Equal(t, "default section not found in ./credentials.test", err.Error(), "not the expected error")
 	require.Empty(t, id, "no MFA device ID should have been returned")
 }
 
@@ -124,7 +124,7 @@ func setFakeCredentials(sectionName, mfaDeviceID string) {
 	// That really should not faile to wrote, but if it did abort the tests
 	// cos nothing will work after this
 	if err != nil {
-		fmt.Printf("Failed to write fake credentials: %s", err.Error())
+		fmt.Printf("\nFailed to write fake credentials: %s\n", err.Error())
 		os.Exit(999)
 	}
 

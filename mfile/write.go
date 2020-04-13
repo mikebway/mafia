@@ -33,11 +33,7 @@ func SaveSessionCredentialsToFile(filepath string, accessKeyID, secretAccessKey,
 	}
 
 	// Either load any previously existing session or create a new one with the required name
-	sessionSectionName := defaultSectionName + sessionSectionSuffix
-	sessionSection, err := cfg.GetSection(sessionSectionName)
-	if err != nil {
-		sessionSection, _ = cfg.NewSection(sessionSectionName)
-	}
+	sessionSection := cfg.Section(sessionSectionName)
 
 	// Set the section key/values
 	sessionSection.NewKey(accessKeyIDKey, *accessKeyID)
