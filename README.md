@@ -44,11 +44,6 @@ Note especially the need to declare your MFA device ID / serial number in the
 
 ## What's Missing
 
-First and foremost - unit testing is woefully incomplete. That is my next task
-and please don't lecture me on test driven development, I know this is bad practice!
-
-After that:
-
 * A flag to specifiy something other than the default credentials in the
 `$HOME/.aws/credentials` file.
 
@@ -62,7 +57,7 @@ have a Windows system to build and test with.
 ## Unit / Integration Testing
 
 The unit tests are really more like integration tests in that they will invoke
-AWS API calls; mocks are not used.
+AWS API calls though successful calls are only achieved through mocking.
 
 You can run all of the unit tests from the command line and receive a coverage
 report as follows:
@@ -78,3 +73,5 @@ tests are run at least and exactly once:
 ```bash
 go test -cover -count=1 ./...
 ```
+
+Unit test coverage should be kept above 90% by line for all packages.
