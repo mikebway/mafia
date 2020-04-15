@@ -10,8 +10,8 @@ package mfile
 import (
 	"testing"
 
-	"github.com/go-ini/ini"
 	"github.com/stretchr/testify/require"
+	"gopkg.in/ini.v1"
 )
 
 // TestSaveSessionCredentials examines the happy path where session credentials are stored
@@ -22,7 +22,7 @@ func TestSaveSessionCredentials(t *testing.T) {
 	defer ResetPackageDefaults()
 
 	// Establisd a virgin fake credentials file with known contents
-	setFakeCredentials(defaultSectionName, fakeMFADeviceID)
+	setFakeCredentials(DefaultSectionName, fakeMFADeviceID)
 
 	// Write fake credentials to that
 	firstAccessKey := "key_1"
@@ -73,14 +73,14 @@ func verifyConfiguration(t *testing.T, accessKeyID, secretAccessKey, sessionToke
 	require.Nil(t, err, "error reading the test credentials file")
 
 	// Confirm thet the default credentials are set as expected
-	defaultSection, err := cfg.GetSection(defaultSectionName)
+	defaultSection, err := cfg.GetSection(DefaultSectionName)
 	require.Nil(t, err, "default section not found in credentials file")
-	require.Equal(t, defaultSection.Key(accessKeyIDKey).Value(), fakeAccessKeyID, "default section, unexpected access key value: [%s]", defaultSection.Key(accessKeyIDKey).Value())
-	require.Equal(t, defaultSection.Key(secretAccessKeyKey).Value(), fakeSecretAccessKey, "default section, unexpected secret key value: [%s]", defaultSection.Key(accessKeyIDKey).Value())
+	require.Equal(t, defaultSection.Key(AccessKeyIDKey).Value(), fakeAccessKeyID, "default section, unexpected access key value: [%s]", defaultSection.Key(AccessKeyIDKey).Value())
+	require.Equal(t, defaultSection.Key(SecretAccessKeyKey).Value(), fakeSecretAccessKey, "default section, unexpected secret key value: [%s]", defaultSection.Key(SecretAccessKeyKey).Value())
 
 	// Confirm that the default-session section is as expected
-	sessionSection, err := cfg.GetSection(sessionSectionName)
-	require.Equal(t, sessionSection.Key(accessKeyIDKey).Value(), accessKeyID, "default-session section, unexpected access key value: [%s]", defaultSection.Key(accessKeyIDKey).Value())
-	require.Equal(t, sessionSection.Key(secretAccessKeyKey).Value(), secretAccessKey, "default-session section, unexpected secret key value: [%s]", defaultSection.Key(accessKeyIDKey).Value())
-	require.Equal(t, sessionSection.Key(sessionTokenKey).Value(), sessionToken, "default-session section, unexpected session token value: [%s]", defaultSection.Key(accessKeyIDKey).Value())
+	sessionSection, err := cfg.GetSection(SessionSectionName)
+	require.Equal(t, sessionSection.Key(AccessKeyIDKey).Value(), accessKeyID, "default-session section, unexpected access key value: [%s]", defaultSection.Key(AccessKeyIDKey).Value())
+	require.Equal(t, sessionSection.Key(SecretAccessKeyKey).Value(), secretAccessKey, "default-session section, unexpected secret key value: [%s]", defaultSection.Key(SecretAccessKeyKey).Value())
+	require.Equal(t, sessionSection.Key(SessionTokenKey).Value(), sessionToken, "default-session section, unexpected session token value: [%s]", defaultSection.Key(SessionTokenKey).Value())
 }

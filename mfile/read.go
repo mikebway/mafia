@@ -13,31 +13,31 @@ import (
 	"os"
 	"os/user"
 
-	"github.com/go-ini/ini"
+	"gopkg.in/ini.v1"
 )
 
 const (
-	// The name of the default section in the AWS configuration file
-	defaultSectionName = "default"
+	// DefaultSectionName names the default section in the AWS configuration file
+	DefaultSectionName = "default"
 
-	// The key name of the AWS accesss key ID field within a configuration file section
-	accessKeyIDKey = "aws_access_key_id"
+	// AccessKeyIDKey defines the name of the AWS accesss key ID field within a configuration file section
+	AccessKeyIDKey = "aws_access_key_id"
 
-	// The key name of the AWS secret access key field within a configuration file section
-	secretAccessKeyKey = "aws_secret_access_key"
+	// SecretAccessKeyKey defines the name of the AWS secret access key field within a configuration file section
+	SecretAccessKeyKey = "aws_secret_access_key"
 
-	// The key name of any MFA authenticated temporary session token field within a configuration file section
-	sessionTokenKey = "aws_session_token"
+	// SessionTokenKey defines the name of any MFA authenticated temporary session token field within a configuration file section
+	SessionTokenKey = "aws_session_token"
 
-	// The key name of the MFA device ID field within a configuration file section
-	mfaDeviceIDKey = "mfa_device_id"
+	// MfaDeviceIDKey defines the name of the MFA device ID field within a configuration file section
+	MfaDeviceIDKey = "mfa_device_id"
 
 	// Suffix appended to the non-session section name to name the correseponding
 	// MHF authenticated session credentials section
 	sessionSectionSuffix = "-session"
 
-	// The default session section name
-	sessionSectionName = defaultSectionName + sessionSectionSuffix
+	// SessionSectionName defines the default session section name in the AWS credentials file
+	SessionSectionName = DefaultSectionName + sessionSectionSuffix
 )
 
 var (
@@ -71,15 +71,15 @@ func GetMFADeviceIDFromFile(filepath string) (string, error) {
 	}
 
 	// Fetch the default section - if there is one
-	defaultSection, err := cfg.GetSection(defaultSectionName)
+	defaultSection, err := cfg.GetSection(DefaultSectionName)
 	if err != nil {
-		return "", fmt.Errorf("%s section not found in %s", defaultSectionName, filepath)
+		return "", fmt.Errorf("%s section not found in %s", DefaultSectionName, filepath)
 	}
 
 	// Fetch the MFA device ID entry - if there is one
-	key := defaultSection.Key(mfaDeviceIDKey)
+	key := defaultSection.Key(MfaDeviceIDKey)
 	if len(key.Value()) == 0 {
-		return "", fmt.Errorf("%s key not found in default section of %s", mfaDeviceIDKey, filepath)
+		return "", fmt.Errorf("%s key not found in default section of %s", MfaDeviceIDKey, filepath)
 	}
 
 	// Return the value of the key

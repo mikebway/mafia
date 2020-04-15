@@ -3,7 +3,7 @@ package mfile
 import (
 	"fmt"
 
-	"github.com/go-ini/ini"
+	"gopkg.in/ini.v1"
 )
 
 // Copyright © 2020 Michael D Broadway <mikebway@mikebway.com>
@@ -33,12 +33,12 @@ func SaveSessionCredentialsToFile(filepath string, accessKeyID, secretAccessKey,
 	}
 
 	// Either load any previously existing session or create a new one with the required name
-	sessionSection := cfg.Section(sessionSectionName)
+	sessionSection := cfg.Section(SessionSectionName)
 
 	// Set the section key/values
-	sessionSection.NewKey(accessKeyIDKey, *accessKeyID)
-	sessionSection.NewKey(secretAccessKeyKey, *secretAccessKey)
-	sessionSection.NewKey(sessionTokenKey, *sessionToken)
+	sessionSection.NewKey(AccessKeyIDKey, *accessKeyID)
+	sessionSection.NewKey(SecretAccessKeyKey, *secretAccessKey)
+	sessionSection.NewKey(SessionTokenKey, *sessionToken)
 
 	// Save the file and we are done
 	return cfg.SaveTo(filepath)

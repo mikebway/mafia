@@ -13,8 +13,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/go-ini/ini"
 	"github.com/stretchr/testify/require"
+	"gopkg.in/ini.v1"
 )
 
 const (
@@ -40,7 +40,7 @@ func TestGetMFADeviceID(t *testing.T) {
 	defer ResetPackageDefaults()
 
 	// Establisd a fake credentials file with an MFA device ID
-	setFakeCredentials(defaultSectionName, fakeMFADeviceID)
+	setFakeCredentials(DefaultSectionName, fakeMFADeviceID)
 
 	// Asking for the MFA device ID should fail
 	id, err := GetMFADeviceID()
@@ -56,7 +56,7 @@ func TestGetMFADeviceIDMissingKey(t *testing.T) {
 	defer ResetPackageDefaults()
 
 	// Establisd a fake credentials file with no MFA device ID
-	setFakeCredentials(defaultSectionName, "")
+	setFakeCredentials(DefaultSectionName, "")
 
 	// Asking for the MFA device ID should fail
 	id, err := GetMFADeviceID()
@@ -110,12 +110,12 @@ func setFakeCredentials(sectionName, mfaDeviceID string) {
 
 	// Populate it with the basics
 	defaultSection, err := cfg.NewSection(sectionName)
-	defaultSection.NewKey(accessKeyIDKey, fakeAccessKeyID)
-	defaultSection.NewKey(secretAccessKeyKey, fakeSecretAccessKey)
+	defaultSection.NewKey(AccessKeyIDKey, fakeAccessKeyID)
+	defaultSection.NewKey(SecretAccessKeyKey, fakeSecretAccessKey)
 
 	// If we were given an MFA device ID, put that in our configuration too
 	if len(mfaDeviceID) != 0 {
-		defaultSection.NewKey(mfaDeviceIDKey, mfaDeviceID)
+		defaultSection.NewKey(MfaDeviceIDKey, mfaDeviceID)
 	}
 
 	// Write the file

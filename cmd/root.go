@@ -113,7 +113,7 @@ func initRootFlags() {
 }
 
 // ============================================================================
-// The following ar provided to support unit tests. In particular, they allow
+// The following are provided to support unit tests. In particular, they allow
 // the tests for the main package to ensure that the environment is reset
 // from any prior tests.
 // ============================================================================
@@ -130,7 +130,7 @@ func PrepForExecute(args ...string) *bytes.Buffer {
 
 // prepForExecute is a package scoped function accepting a string array of
 // command line argument values. It resets the session environment and
-// establishs a a buffer to capture the output of the subsequent command
+// establishs a buffer to capture the output of the subsequent command
 // execution.
 func prepForExecute(args []string) *bytes.Buffer {
 
