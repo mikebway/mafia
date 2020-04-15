@@ -18,6 +18,28 @@ type SessionCredentials struct {
 	SessionToken    *string
 }
 
+// GetSessionTokenFunc is a function type that corresponds to the AWS STS function for obtaining
+// a session token. Rather than calling this function directly from GetSessionCredentials(..),
+// it is called via a function variable; when unit testing, this function variable can be
+// be overriden and point to a mock implementation.
+type GetSessionTokenFunc func(awsService *sts.STS, input *sts.GetSessionTokenInput) (*sts.GetSessionTokenOutput, error)
+
+var (
+
+	// A function variable that, normally, wraps the AWS STS GetSessionToken(..) function
+	// but can be overriden for unit testsing. This is initialied at load time via a call to
+	// the ResetPackageDefaults(..) function.
+	getSessionTokenFunc GetSessionTokenFunc
+)
+
+// Load time initialization
+func init() {
+
+	// Configure the default state of this package, in particular, set the getSessionTokenFunc
+	// to reference a function that wraps the AWS STS GetSessionToken(..) function.
+	ResetPackageDefaults()
+}
+
 // GetSessionCredentials combines AWS credentials from the environment with a provided MFA
 // token to authenticate with AWS and obtain session credentials.
 //
@@ -39,8 +61,9 @@ func GetSessionCredentials(mfaSerialNumber, mfaToken string, duration int64) (*S
 		TokenCode:       aws.String(mfaToken),
 	}
 
-	// Request a new session from AWS
-	result, err := svc.GetSessionToken(input)
+	// Request a new session from AWS via our wrapper function variable.
+	// When unit testing, the
+	result, err := getSessionTokenFunc(svc, input)
 	if err != nil {
 		return nil, err
 	}
@@ -52,4 +75,21 @@ func GetSessionCredentials(mfaSerialNumber, mfaToken string, duration int64) (*S
 		SecretAccessKey: result.Credentials.SecretAccessKey,
 		SessionToken:    result.Credentials.SessionToken,
 	}, nil
+}
+
+// SetGetSessionTokenFunc allows unit tests to substitute a mock function in place of
+// the default AWS STS GetSessionToken(..) wrapper so that tests can control the responses.
+func SetGetSessionTokenFunc(f GetSessionTokenFunc) {
+	getSessionTokenFunc = f
+}
+
+// ResetPackageDefaults establishes or reestablishes the normal package global values.
+// This is called during package initialization and alos by unit tests needing to
+// leave the package as they found it.
+func ResetPackageDefaults() {
+
+	// Configure the function wrapper used to ask AWS STS for a session token
+	getSessionTokenFunc = func(awsService *sts.STS, input *sts.GetSessionTokenInput) (*sts.GetSessionTokenOutput, error) {
+		return awsService.GetSessionToken(input)
+	}
 }
