@@ -21,13 +21,13 @@ type SessionCredentials struct {
 // GetSessionTokenFunc is a function type that corresponds to the AWS STS function for obtaining
 // a session token. Rather than calling this function directly from GetSessionCredentials(..),
 // it is called via a function variable; when unit testing, this function variable can be
-// be overriden and point to a mock implementation.
+// be overridden and point to a mock implementation.
 type GetSessionTokenFunc func(awsService *sts.STS, input *sts.GetSessionTokenInput) (*sts.GetSessionTokenOutput, error)
 
 var (
 
 	// A function variable that, normally, wraps the AWS STS GetSessionToken(..) function
-	// but can be overriden for unit testsing. This is initialied at load time via a call to
+	// but can be overridden for unit testsing. This is initialied at load time via a call to
 	// the ResetPackageDefaults(..) function.
 	getSessionTokenFunc GetSessionTokenFunc
 )

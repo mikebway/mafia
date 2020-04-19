@@ -1,5 +1,7 @@
 # Mafia - A CLI Utility Supporting AWS MFA Authentication
 
+[![ISC License][isc-img]][isc] [![Go Report Card][go-report]][go-report-card]
+
 **Mafia** may be used as a subsitute for the `aws sts get-session-token` command, offering the
 advantages of
 
@@ -75,3 +77,9 @@ go test -cover -count=1 ./...
 ```
 
 Unit test coverage should be kept above 90% by line for all packages.
+
+[isc-img]: https://img.shields.io/badge/License-ISC-blue.svg
+[isc]: https://github.com/mikebway/mafia/blob/master/LICENSE
+
+[go-report]: https://goreportcard.com/badge/github.com/mikebway/mafia
+[go-report-card]: https://goreportcard.com/report/github.com/mikebway/mafia

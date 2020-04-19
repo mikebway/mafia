@@ -20,7 +20,7 @@ const (
 	// DefaultSectionName names the default section in the AWS configuration file
 	DefaultSectionName = "default"
 
-	// AccessKeyIDKey defines the name of the AWS accesss key ID field within a configuration file section
+	// AccessKeyIDKey defines the name of the AWS access key ID field within a configuration file section
 	AccessKeyIDKey = "aws_access_key_id"
 
 	// SecretAccessKeyKey defines the name of the AWS secret access key field within a configuration file section
@@ -42,7 +42,7 @@ const (
 
 var (
 	// What the name says, filled in at load time. As a global variable, this can be
-	// overriden by unit tests to better control outcomes.
+	// overridden by unit tests to better control outcomes.
 	defaultCredentialsFilePath string
 )
 

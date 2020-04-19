@@ -136,7 +136,7 @@ func TestDisplayHappyPath(t *testing.T) {
 	require.Nil(t, executeError, "there should not have been an error: ", executeError)
 	require.Empty(t, output, "there should not have been any help output: %s", output)
 
-	// The stdout capure should contain the enviroment variables form and the ready-to-paste
+	// The stdout capure should contain the environment variables form and the ready-to-paste
 	// into credentials file form.
 	require.Contains(t, stdout, "export AWS_ACCESS_KEY_ID=key")
 	require.Contains(t, stdout, "export AWS_SECRET_ACCESS_KEY=secret")
@@ -166,7 +166,7 @@ func TestSaveHappyPath(t *testing.T) {
 	require.Nil(t, executeError, "there should not have been an error: ", executeError)
 	require.Empty(t, output, "there should not have been any help output: %s", output)
 
-	// The stdout capure should contain the enviroment variables form and the ready-to-paste
+	// The stdout capure should contain the environment variables form and the ready-to-paste
 	// into credentials file form.
 	require.Contains(t, stdout, "Session credentials saved to file")
 }
@@ -228,7 +228,7 @@ func executeCommandCapturingStdout(args ...string) (string, string) {
 	// be calling AWS and so it won't be able to object
 	output := executeCommand(args...)
 
-	// Restore stdout and close the write end of the pipe so that we can collect the ouput
+	// Restore stdout and close the write end of the pipe so that we can collect the output
 	os.Stdout = originalStdout
 	writeFile.Close()
 

@@ -33,7 +33,7 @@ const (
 )
 
 // TestGetMFADeviceID examines the happy path where an MFA device serial number has been
-// stored in the AWS credentials and can be retrieved successfuly.
+// stored in the AWS credentials and can be retrieved successfully.
 func TestGetMFADeviceID(t *testing.T) {
 
 	// Revert the package state back to notmal after the test has run
@@ -49,7 +49,7 @@ func TestGetMFADeviceID(t *testing.T) {
 }
 
 // TestGetMFADeviceIDMissingKey examines the sad path where an MFA device serial number has not
-// been stored in the AWS credentials and can be retrieved successfuly.
+// been stored in the AWS credentials and can be retrieved successfully.
 func TestGetMFADeviceIDMissingKey(t *testing.T) {
 
 	// Revert the package state back to notmal after the test has run
@@ -66,7 +66,7 @@ func TestGetMFADeviceIDMissingKey(t *testing.T) {
 }
 
 // TestGetMFADeviceIDMissingSection examines the sad path where the default section has not
-// been stored in the AWS credentials and can be retrieved successfuly.
+// been stored in the AWS credentials and can be retrieved successfully.
 func TestGetMFADeviceIDMissingSection(t *testing.T) {
 
 	// Revert the package state back to notmal after the test has run

@@ -80,6 +80,7 @@ func verifyConfiguration(t *testing.T, accessKeyID, secretAccessKey, sessionToke
 
 	// Confirm that the default-session section is as expected
 	sessionSection, err := cfg.GetSection(SessionSectionName)
+	require.Nil(t, err, "session section not found in credentials file")
 	require.Equal(t, sessionSection.Key(AccessKeyIDKey).Value(), accessKeyID, "default-session section, unexpected access key value: [%s]", defaultSection.Key(AccessKeyIDKey).Value())
 	require.Equal(t, sessionSection.Key(SecretAccessKeyKey).Value(), secretAccessKey, "default-session section, unexpected secret key value: [%s]", defaultSection.Key(SecretAccessKeyKey).Value())
 	require.Equal(t, sessionSection.Key(SessionTokenKey).Value(), sessionToken, "default-session section, unexpected session token value: [%s]", defaultSection.Key(SessionTokenKey).Value())

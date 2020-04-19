@@ -1,5 +1,5 @@
 // Package cmd utilizes the github.com/spf13/cobra module to parse the
-// mafia command line arguements and display usage information.
+// mafia command line arguments and display usage information.
 //
 // Copyright © 2020 Michael D Broadway <mikebway@mikebway.com>
 //
@@ -45,7 +45,7 @@ Replacing 999999999999 with your account number, and jane with your username.
 
 	// RunE is called after the command line has been successfully parsed if no sub-command
 	// has been specified. The 'E' indicates that an error (or nil) shall be returned; this
-	// cariation of Run is chosen to facilitiate unit testing.
+	// cariation of Run is chosen to facilitate unit testing.
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		// If no MFA code was provided or help was requested, display the help
@@ -185,7 +185,7 @@ func displaySessionCredentials(credentials *creds.SessionCredentials) {
 	fmt.Printf("export AWS_ACCESS_KEY_ID=%s\n", *credentials.AccessKeyID)
 	fmt.Printf("export AWS_SECRET_ACCESS_KEY=%s\n", *credentials.SecretAccessKey)
 	fmt.Printf("export AWS_SESSION_TOKEN=%s\n", *credentials.SessionToken)
-	fmt.Println("history -c # clear shell history immediatly after setting secrets")
+	fmt.Println("history -c # clear shell history immediately after setting secrets")
 
 	// Display the results in a form that can be copy-and-pasted to set as environment variables
 	fmt.Printf("\nTo paste into ~/.aws/credentials\n\n")
