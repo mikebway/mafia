@@ -1,6 +1,6 @@
 # Mafia - A CLI Utility Supporting AWS MFA Authentication
 
-[![ISC License][isc-img]][isc] [![Go Report Card][go-report]][go-report-card] ![Test][test-action] [![Coverage Status][cov-img]][cov]
+[![ISC License][isc-img]][isc] [![Go Report Card][go-report]][go-report-card] [![Test][test-action]][test-action-runs] [![Coverage Status][cov-img]][cov]
 
 **Mafia** may be used as a subsitute for the [`aws sts get-session-token`][sts-session]
 CLI command, offering the advantages of:
@@ -96,6 +96,7 @@ git thanks to an entry in the `.gitignore` file.
 [go-report-card]: https://goreportcard.com/report/github.com/mikebway/mafia
 
 [test-action]: https://github.com/mikebway/mafia/workflows/Tests/badge.svg
+[test-action-runs]: https://github.com/mikebway/mafia/actions?query=workflow%3ATests
 
 [cov-img]: https://codecov.io/gh/mikebway/mafia/branch/master/graph/badge.svg
 [cov]: https://codecov.io/gh/mikebway/mafia
