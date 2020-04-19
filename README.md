@@ -95,7 +95,7 @@ git thanks to an entry in the `.gitignore` file.
 [go-report]: https://goreportcard.com/badge/github.com/mikebway/mafia
 [go-report-card]: https://goreportcard.com/report/github.com/mikebway/mafia
 
-[test-action]: https://github.com/mikebway/mafia/workflows/Test/badge.svg
+[test-action]: https://github.com/mikebway/mafia/workflows/Tests/badge.svg
 
 [cov-img]: https://codecov.io/gh/mikebway/mafia/branch/master/graph/badge.svg
 [cov]: https://codecov.io/gh/mikebway/mafia
