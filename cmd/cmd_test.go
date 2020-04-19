@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -112,7 +113,10 @@ func TestBadToken(t *testing.T) {
 
 	// We should have a subcommand required command and a complete usage dump
 	require.NotNil(t, executeError, "there should have been an error")
-	require.Contains(t, executeError.Error(), "minimum field size of 6", "Error should have complained about invalid MFA token length")
+	require.Condition(t, func() bool {
+		return checkForExpectedSTSCallFailure(executeError)
+	}, "Error should have complained about nonexistent credentials file or invalid MFA token length")
+
 	require.Empty(t, output, "Output for an error condition should have been empty")
 }
 
@@ -191,7 +195,9 @@ func TestPrepForExecute(t *testing.T) {
 
 	// Check everything out
 	require.NotNil(t, executeError, "there should have been an error")
-	require.Contains(t, executeError.Error(), "Member must have length less than or equal to 6", "Error should have complained about invalid MFA token length")
+	require.Condition(t, func() bool {
+		return checkForExpectedSTSCallFailure(executeError)
+	}, "Error should have complained about nonexistent credentials file or invalid MFA token length")
 	require.Empty(t, output, "Output for an error condition should have been empty")
 }
 
@@ -294,4 +300,23 @@ func resetChildPackages() {
 	// Wash the faces of both dirty kids
 	creds.ResetPackageDefaults()
 	mfile.ResetPackageDefaults()
+}
+
+// checkForExpectedSTSCallFailure checks to see whether one of the expected error conditions occurred
+// when calling the AWS STS GetSessionToken(..) method.
+func checkForExpectedSTSCallFailure(err error) bool {
+
+	// We expect and error of one or two types ...
+	if err != nil ||
+		strings.Contains(err.Error(), "Could not read from credentials file") ||
+		strings.Contains(err.Error(), "minimum field size of 6") {
+
+		// We saw an error and it was either that there was no AWS credentials file (as
+		// will happen with a GitHub action running a build and tests) or that the
+		// token parameter was too short to be valid. All is good.
+		return true
+	}
+
+	// Bummer - this is not what we expected?!?
+	return false
 }

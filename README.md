@@ -1,9 +1,9 @@
 # Mafia - A CLI Utility Supporting AWS MFA Authentication
 
-[![ISC License][isc-img]][isc] [![Go Report Card][go-report]][go-report-card]
+[![ISC License][isc-img]][isc] [![Go Report Card][go-report]][go-report-card] ![Test][test-action] [![Coverage Status][cov-img]][cov]
 
-**Mafia** may be used as a subsitute for the `aws sts get-session-token` command, offering the
-advantages of
+**Mafia** may be used as a subsitute for the [`aws sts get-session-token`][sts-session]
+CLI command, offering the advantages of:
 
 * Not having to remember and type out your MFA device serial number.
 
@@ -58,6 +58,8 @@ have a Windows system to build and test with.
 
 ## Unit / Integration Testing
 
+Unit test coverage should be kept above 90% by line for all packages.
+
 The unit tests are really more like integration tests in that they will invoke
 AWS API calls though successful calls are only achieved through mocking.
 
@@ -76,10 +78,26 @@ tests are run at least and exactly once:
 go test -cover -count=1 ./...
 ```
 
-Unit test coverage should be kept above 90% by line for all packages.
+For a more detailed reported, broken down by function and with a summary total 
+for the complete project, two steps are required:
+
+```bash
+go test ./... -coverprofile cover.out
+go tool cover -func cover.out
+```
+
+The `cover.out` file, and all files with the `.out` extendation, ar ignored by
+git thanks to an entry in the `.gitignore` file.
 
 [isc-img]: https://img.shields.io/badge/License-ISC-blue.svg
 [isc]: https://github.com/mikebway/mafia/blob/master/LICENSE
 
 [go-report]: https://goreportcard.com/badge/github.com/mikebway/mafia
 [go-report-card]: https://goreportcard.com/report/github.com/mikebway/mafia
+
+[test-action]: https://github.com/mikebway/mafia/workflows/Test/badge.svg
+
+[cov-img]: https://codecov.io/gh/mikebway/mafia/branch/master/graph/badge.svg
+[cov]: https://codecov.io/gh/mikebway/mafia
+
+[sts-session]: https://docs.aws.amazon.com/cli/latest/reference/sts/get-session-token.html
