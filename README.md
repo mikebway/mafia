@@ -86,7 +86,7 @@ go test ./... -coverprofile cover.out
 go tool cover -func cover.out
 ```
 
-The `cover.out` file, and all files with the `.out` extendation, ar ignored by
+The `cover.out` file, and all files with the `.out` extention, are ignored by
 git thanks to an entry in the `.gitignore` file.
 
 [isc-img]: https://img.shields.io/badge/License-ISC-blue.svg
